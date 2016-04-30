@@ -1,0 +1,25 @@
+<ion-view title="Medicine Stock" id="page5">
+    <ion-content padding="true" class="has-header">
+        <ion-list>
+            <ion-item>
+            <div ui-sref="menu.addMedicineDetails">
+            <h2>
+                Medicine Name
+            </h2>
+            <p>
+                Quantity
+            </p>
+            <p>
+                Exp Date
+            </p>
+            <p>
+                Notify Me Before
+            </p>
+            </div>
+           <p style="text-align: end">
+            <button class="button-clear ion-android-delete" ng-click="Delete($index)"></button>
+            </p>   
+            </ion-item>        
+        </ion-list>
+    </ion-content>
+</ion-view>
