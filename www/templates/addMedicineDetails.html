@@ -1,9 +1,11 @@
 <ion-view title="Add Medicine Details" id="page2">
-    <ion-content padding="true" class="has-header">
+    <ion-content padding="true" class="has-header" ng-controller="addMedicineDetailsCtrl">
         <ion-list>
             <label class="item item-select" name="MedicineName">
                 <span class="input-label">Select Medicine</span>
-                <select></select>
+                <select ng-model="New.MedicineName" ng-options="c.MedicineName as c.MedicineName for c in MedicineMasterCollection">
+                    <option value="">Select</option>
+                </select>
             </label>
             <label class="item item-input" name="BatchNo">
                 <span class="input-label">Batch No.</span>
