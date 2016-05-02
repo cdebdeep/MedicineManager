@@ -16,7 +16,6 @@ angular.module('app.services', [])
                     GenericName: obj.GenericName
                 }
             );
-            console.log($localStorage.MedicieMasterCollection);
             return $localStorage.MedicieMasterCollection;
         };
         MedicineMasterService.GetMedicieMaster = function (MedicineName) {

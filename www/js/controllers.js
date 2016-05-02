@@ -4,7 +4,7 @@ angular.module('app.controllers', [])
 
 })
    
-.controller('addMedicineDetailsCtrl', function($scope,MedicineMasterService) {
+/*.controller('addMedicineDetailsCtrl', function($scope,MedicineMasterService) {
         function init(){
         $scope.MedicineMasterCollection=[];   
         var TempCollection =MedicineMasterService.GetAllMedicieMaster();
@@ -14,7 +14,7 @@ angular.module('app.controllers', [])
     }   
     
      init();  
-})
+})*/
       
 .controller('medicineMasterCtrl', function($scope,MedicineMasterService,$ionicPopup) {
     //MedicineMasterService.DeleteMedicieMaster();
@@ -57,8 +57,8 @@ angular.module('app.controllers', [])
                         angular.forEach(TempCollection,function(v,k){
                                 $scope.MedicineMasterCollection.push(v);            
                             });                     
-                }                
-                });     
+                }               
+                });    
         
     };  
      

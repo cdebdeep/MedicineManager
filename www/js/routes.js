@@ -25,7 +25,7 @@ angular.module('app.routes', [])
     views: {
       'side-menu21': {
         templateUrl: 'templates/addMedicineDetails.html',
-        controller: 'addMedicineDetailsCtrl'
+        controller: 'MedicineDetailsCtrl'
       }
     }
   })
@@ -51,7 +51,7 @@ angular.module('app.routes', [])
     views: {
       'side-menu21': {
         templateUrl: 'templates/medicineStock.html',
-        controller: 'medicineStockCtrl'
+        controller: 'MedicineDetailsCtrl'
       }
     }
   })

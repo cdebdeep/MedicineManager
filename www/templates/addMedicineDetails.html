@@ -1,5 +1,5 @@
 <ion-view title="Add Medicine Details" id="page2">
-    <ion-content padding="true" class="has-header" ng-controller="addMedicineDetailsCtrl">
+    <ion-content padding="true" class="has-header" ng-controller="MedicineDetailsCtrl">
         <ion-list>
             <label class="item item-select" name="MedicineName">
                 <span class="input-label">Select Medicine</span>
@@ -9,25 +9,34 @@
             </label>
             <label class="item item-input" name="BatchNo">
                 <span class="input-label">Batch No.</span>
-                <input type="text" placeholder="">
+                <input type="text" placeholder="" ng-model="New.BatchNo">
             </label>
             <label class="item item-input" name="PurchaseDate">
                 <span class="input-label">Purchase Date</span>
-                <input type="date" placeholder="">
+                <input type="date" placeholder="" ng-model="New.PurchaseDate">
             </label>
             <label class="item item-input" name="Quantity">
                 <span class="input-label">Quantity</span>
-                <input type="number" placeholder="">
+                <input type="number"   placeholder="" ng-model="New.Quantity">
             </label>
             <label class="item item-input" name="ExpDate">
                 <span class="input-label">Exp Date</span>
-                <input type="date" placeholder="">
+                <input type="date" placeholder="" ng-model="New.ExpDate">
             </label>
-            <label class="item item-input" name="NetifyMeBefore">
+            <label class="item item-input" name="NotifyMeBefore">
                 <span class="input-label">Notify Me Before</span>
-                <input type="number" placeholder="">
+                <input type="number" placeholder="" ng-model="New.NotifyMeBefore">
+            </label>
+            <label class="item item-select" name="NotifyType">
+                <span class="input-label">Notify Type</span>
+                <select  ng-model="New.NotifyType" ng-options="n.NotifyType as n.NotifyType for n in NotifyTypeCollection">
+                  <option value="">Select</option>
+                </select>
             </label>
         </ion-list>
-        <button id="addMedicineDetails-button4" style="text-align:justify;" class="button button-positive  icon-left ion-android-add-circle">Save</button>
+        <div style="text-align: right">
+        <button id="addMedicineDetails-button4" style="text-align:justify;"
+         class="button button-positive  icon-left ion-android-add-circle" ng-click="Post(New)">Save</button>
+        </div>
     </ion-content>
 </ion-view>

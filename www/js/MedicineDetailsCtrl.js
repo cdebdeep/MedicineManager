@@ -3,15 +3,26 @@
  */
 angular.module('app.controllers')
 
-.controller('MedicineDetailsCtrl', function($scope,MedicineMasterService,MedicineStockService) {
-
-        function init(){
+.controller('MedicineDetailsCtrl', function($scope,$ionicPopup,MedicineMasterService,MedicineStockService) {
+    function ViewModel(){
+        this.ItemId=0;
+        this.MedicineName='';
+        this.BatchNo='';
+        this.PurchaseDate='';
+        this.Quantity=0;
+        this.ExpDate='';
+        this.NotifyMeBefore=0;
+        this.NotifyType='';
+    }
+        function init(){           
             $scope.MedicineMasterCollection=[];
             var TempCollection =MedicineMasterService.GetAllMedicieMaster();
             angular.forEach(TempCollection,function(v,k){
                 $scope.MedicineMasterCollection.push(v);
-            });
-            console.log($scope.MedicineMasterCollection);    
+            });          
+
+            $scope.MedicineStockCollection=MedicineStockService.GetAll();
+            
             
             $scope.NotifyTypeCollection=[
                 {'NotifyType':'hour'},
@@ -19,7 +30,7 @@ angular.module('app.controllers')
                 {'NotifyType':'week'},
                 {'NotifyType':'month'}
             ];
-            var model ={};
+            /*var model ={};
             model.ItemId=0;
             model.MedicineName='';
             model.BatchNo='';
@@ -28,25 +39,89 @@ angular.module('app.controllers')
             model.ExpDate='';
             model.NotifyMeBefore=0;
             model.NotifyType='';
-            $scope.New=model;
+            $scope.New=model;*/
+            $scope.New = new ViewModel();
 
-            $scope.MedicineStockCollection=MedicineStockService.GetAll();
+
         }
         init();
         $scope.Post=function (NewItem) {
-            NewItem.ItemId=0;
-            console.log(NewItem);
-            MedicineStockService.PutItem(NewItem);
+            NewItem.ItemId=0;            
+            var result = MedicineStockService.PostItem(NewItem);
+            /*var model ={};
+            model.ItemId=0;
+            model.MedicineName='';
+            model.BatchNo='';
+            model.PurchaseDate='';
+            model.Quantity=0;
+            model.ExpDate='';
+            model.NotifyMeBefore=0;
+            model.NotifyType='';
+            $scope.New=model;*/
+            if(result){
+                $ionicPopup.alert({
+                    title: 'Success',
+                    template: 'Record saved successfully'
+                });
+                $scope.New = new ViewModel();
+            }else{
+                $ionicPopup.alert({
+                    title: 'Success',
+                    template: 'Record can not be saved'
+                });                
+            }            
             
         }
-        $scope.Put=function(Item) {            
-            MedicineStockService.PutItem(Item);
-    
+        $scope.Put=function(Item) {
+            var result =  MedicineStockService.PutItem(Item);
+            if(result){
+                $ionicPopup.alert({
+                    title: 'Success',
+                    template: 'Record saved successfully'
+                });
+                $scope.New = new ViewModel();
+            }else{
+                $ionicPopup.alert({
+                    title: 'Success',
+                    template: 'Record can not be saved'
+                });
+            }
+
         }
-        $scope.Delete=function (Item) {
-            MedicineStockService.DeleteItem(Item.ItemId);
+        $scope.Delete=function (ItemId) {
+            var confirm = $ionicPopup.confirm({
+                title:'Confirm Delete',
+                template:'Are you sure to delete !'
+            });
+            confirm.then(function(res){
+                if(res){
+                    var result =  MedicineStockService.DeleteItem(ItemId);
+                    if(result){
+                        $ionicPopup.alert({
+                            title: 'Success',
+                            template: 'Record deleted successfully'
+                        });
+                    }
+                    else{
+                        $ionicPopup.alert({
+                            title: 'Error',
+                            template: 'Record can not be deleted'
+                        });
+                    }
+
+                }
+            });
         }
         $scope.DeleteAll=function (Item) {
-            MedicineStockService.DeleteAll();
+            var confirm = $ionicPopup.confirm({
+                title:'Confirm Delete',
+                template:'All records will be deleted, are you sure to continue!'
+            });
+            confirm.then(function(res){
+                if(res){
+                    MedicineStockService.DeleteAll();
+                }
+            });
         }
+
 })
