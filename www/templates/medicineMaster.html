@@ -1,4 +1,4 @@
-<ion-view title="Medicine Master" id="page4">    
+<ion-view title="Medicine Master" id="page4">
         <ion-content padding="true" class="has-header" ng-controller="medicineMasterCtrl">
         <div>
             <form class="list">
@@ -8,32 +8,36 @@
             </label>
             <label class="item item-input" name="MedicineName">
                 <span class="input-label">Medicine Name</span>
-                <input type="text" placeholder="" ng-model="NewItem.MedicineName">
+                <input type="text" placeholder="" ng-model="New.MedicineName">
             </label>
             <label class="item item-input" name="GenericName">
                 <span class="input-label">Generic Name</span>
-                <input type="text" placeholder="" ng-model="NewItem.GenericName">
+                <input type="text" placeholder="" ng-model="New.GenericName">
             </label>
-        </form>        
+        </form>
         <button id="medicineMaster-button6" style="text-align:justify;"
-         class="button button-positive  icon-left ion-android-add-circle" ng-click="PostMedicieMaster(NewItem)">Save</button>
+         class="button button-positive  icon-left ion-android-add-circle" ng-click="Post(New)">Save</button>
     </div>
     <div>
         <ion-scroll zooming="true" direction="y" style="height:500px;">
         <ion-list>
             <ion-item ng-repeat="medi in MedicineMasterCollection  | filter: SearchCriteria track by $index" class="item-thumbnail-left">
+              <div ui-sref="menu.MedicineMasterEdit({Id:medi.Id})">
             <h2>
             <i class="icon ion-person-add placeholder-icon"></i>
+            {{medi.Id}}
             {{medi.MedicineName}}
             </h2>
             <p>
-            <!--<i class="icon ion-email placeholder-icon"></i>-->
-            {{medi.GenericName}}            
+            {{medi.GenericName}}
             </p>
+              </div>
+              <div>
             <p style="text-align: end;">
-            <button class="button-clear ion-android-delete" ng-click="DeleteRecord($index)"></button>
+            <button class="button-clear ion-android-delete" ng-click="Delete(medi)"></button>
              </p>
-            </ion-item>          
+              </div>
+            </ion-item>
         </ion-list>
         </ion-scroll>
     </div>

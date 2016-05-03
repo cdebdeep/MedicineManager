@@ -3,7 +3,7 @@
  */
 angular.module('app.controllers')
 
-.controller('MedicineDetailsCtrl', function($scope,$ionicPopup,MedicineMasterService,MedicineStockService) {
+.controller('MedicineStockAddCtrl', function($scope, $stateParams, $ionicPopup, MedicineMasterService, MedicineStockService) {
     function ViewModel(){
         this.ItemId=0;
         this.MedicineName='';
@@ -14,9 +14,9 @@ angular.module('app.controllers')
         this.NotifyMeBefore=0;
         this.NotifyType='';
     }
-        function init(){           
+        function init(){                   
             $scope.MedicineMasterCollection=[];
-            var TempCollection =MedicineMasterService.GetAllMedicieMaster();
+            var TempCollection =MedicineMasterService.GetAll();
             angular.forEach(TempCollection,function(v,k){
                 $scope.MedicineMasterCollection.push(v);
             });          
@@ -29,17 +29,7 @@ angular.module('app.controllers')
                 {'NotifyType':'day'},
                 {'NotifyType':'week'},
                 {'NotifyType':'month'}
-            ];
-            /*var model ={};
-            model.ItemId=0;
-            model.MedicineName='';
-            model.BatchNo='';
-            model.PurchaseDate='';
-            model.Quantity=0;
-            model.ExpDate='';
-            model.NotifyMeBefore=0;
-            model.NotifyType='';
-            $scope.New=model;*/
+            ];            
             $scope.New = new ViewModel();
 
 
@@ -47,17 +37,7 @@ angular.module('app.controllers')
         init();
         $scope.Post=function (NewItem) {
             NewItem.ItemId=0;            
-            var result = MedicineStockService.PostItem(NewItem);
-            /*var model ={};
-            model.ItemId=0;
-            model.MedicineName='';
-            model.BatchNo='';
-            model.PurchaseDate='';
-            model.Quantity=0;
-            model.ExpDate='';
-            model.NotifyMeBefore=0;
-            model.NotifyType='';
-            $scope.New=model;*/
+            var result = MedicineStockService.PostItem(NewItem);           
             if(result){
                 $ionicPopup.alert({
                     title: 'Success',

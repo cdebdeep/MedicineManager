@@ -1,5 +1,5 @@
 <ion-view title="Medicine Stock" id="page5">
-    <ion-content padding="true" class="has-header" ng-controller="MedicineDetailsCtrl">
+    <ion-content padding="true" class="has-header" ng-controller="MedicineStockAddCtrl">
         <div>
             <form class="list">
                 <label class="item item-input">
@@ -12,7 +12,7 @@
         <ion-scroll zooming="true" direction="y" style="height:500px;">
         <ion-list>
             <ion-item ng-repeat="medi in MedicineStockCollection  | filter: SearchCriteria track by $index" class="item-thumbnail-left">
-            <div ui-sref="menu.addMedicineDetails">
+            <div ui-sref="menu.EditMedicineDetails({ItemId:medi.ItemId})">
             <h2>
                 {{medi.MedicineName}}
             </h2>
@@ -29,8 +29,8 @@
            <p style="text-align: end">
                {{medi.ItemId}}
             <button class="button-clear ion-android-delete" ng-click="Delete(medi.ItemId)"></button>
-            </p>   
-            </ion-item>        
+            </p>
+            </ion-item>
         </ion-list>
         </ion-scroll>
         </div>

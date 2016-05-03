@@ -7,62 +7,82 @@ angular.module('app.routes', [])
   // Set up the various states which the app can be in.
   // Each state's controller can be found in controllers.js
   $stateProvider
-    
-  
 
-      .state('menu.home', {
-    url: '/page1',
+    .state('menu', {
+      url: '/side-menu21',
+      templateUrl: 'templates/menu.html',
+      abstract:true
+    })
+
+  .state('menu.home', {
+    url: '/home',
     views: {
       'side-menu21': {
-        templateUrl: 'templates/home.html',
+        templateUrl: 'templates/Home.html',
         controller: 'homeCtrl'
       }
     }
   })
 
-  .state('menu.addMedicineDetails', {
-    url: '/add',
-    views: {
-      'side-menu21': {
-        templateUrl: 'templates/addMedicineDetails.html',
-        controller: 'MedicineDetailsCtrl'
-      }
-    }
-  })
-
-  .state('menu', {
-    url: '/side-menu21',
-    templateUrl: 'templates/menu.html',
-    abstract:true
-  })
-
   .state('menu.medicineMaster', {
-    url: '/page4',
+      url: '/medicinemaster',
+      views: {
+        'side-menu21': {
+          templateUrl: 'templates/MedicineMaster.html',
+          controller: 'medicineMasterCtrl'
+        }
+      }
+    })
+
+    .state('menu.MedicineMasterEdit', {
+      url: '/MedicineMasterEdit',
+      params:{
+        Id:null
+      },
+      views: {
+        'side-menu21': {
+          templateUrl: 'templates/MedicineMasterEdit.html',
+          controller: 'MedicineMasterEditCtrl'
+        }
+      }
+    })
+
+  .state('menu.MedicineStock', {
+      url: '/stock',
+      views: {
+        'side-menu21': {
+          templateUrl: 'templates/MedicineStock.html',
+          controller: 'MedicineStockAddCtrl'
+        }
+      }
+    })
+
+  .state('menu.MedicineStockAdd', {
+    url: '/addstock',
     views: {
       'side-menu21': {
-        templateUrl: 'templates/medicineMaster.html',
-        controller: 'medicineMasterCtrl'
+        templateUrl: 'templates/MedicineStockAdd.html',
+        controller: 'MedicineStockAddCtrl'
       }
     }
   })
 
-.state('menu.medicineStock', {
-    url: '/page5',
+  .state('menu.EditMedicineDetails', {
+    url: '/editstock',
+    params:{
+      ItemId:null
+    },
     views: {
       'side-menu21': {
-        templateUrl: 'templates/medicineStock.html',
-        controller: 'MedicineDetailsCtrl'
+        templateUrl: 'templates/MedicineStockEdit.html',
+        controller: 'MedicineStockEditCtrl'
       }
     }
   })
-  /*.state('menu.medicineStock', {
-    url: '/page5',
-    templateUrl: 'templates/medicineStock.html',
-    controller: 'medicineStockCtrl'
-  })*/
 
-$urlRouterProvider.otherwise('/side-menu21/page1')
 
-  
+$urlRouterProvider.otherwise('/side-menu21/home')
+
+
 
 });

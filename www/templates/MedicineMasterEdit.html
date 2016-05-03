@@ -1,0 +1,18 @@
+<ion-view title="Medicine Master" id="MedicineMasterEdit">
+  <ion-content padding="true" class="has-header" ng-controller="MedicineMasterEditCtrl">
+    <div>
+      <form class="list">
+        <label class="item item-input" name="MedicineName">
+          <span class="input-label">Medicine Name</span>
+          <input type="text" ng-disabled="true" placeholder="" ng-model="New.MedicineName">
+        </label>
+        <label class="item item-input" name="GenericName">
+          <span class="input-label">Generic Name</span>
+          <input type="text" placeholder="" ng-model="New.GenericName">
+        </label>
+      </form>
+      <button id="medicineMaster-button6" style="text-align:justify;"
+              class="button button-positive  icon-left ion-android-add-circle" ng-click="Put(New)">Save</button>
+    </div>
+  </ion-content>
+</ion-view>

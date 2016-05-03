@@ -1,71 +1,111 @@
 angular.module('app.controllers', [])
-  
+
 .controller('homeCtrl', function($scope) {
 
 })
-   
-/*.controller('addMedicineDetailsCtrl', function($scope,MedicineMasterService) {
-        function init(){
-        $scope.MedicineMasterCollection=[];   
-        var TempCollection =MedicineMasterService.GetAllMedicieMaster();
-        angular.forEach(TempCollection,function(v,k){
-            $scope.MedicineMasterCollection.push(v);            
-        });
-    }   
-    
-     init();  
-})*/
-      
-.controller('medicineMasterCtrl', function($scope,MedicineMasterService,$ionicPopup) {
-    //MedicineMasterService.DeleteMedicieMaster();
+
+.controller('medicineMasterCtrl', function($scope,MedicineMasterService,MedicineStockService,$ionicPopup) {
+  function ViewModel(){
+    this.Id=0;
+    this.MedicineName='';
+    this.GenericName='';
+  }
     function init(){
-        $scope.MedicineMasterCollection=[];   
-        var TempCollection =MedicineMasterService.GetAllMedicieMaster();
-        angular.forEach(TempCollection,function(v,k){
-            $scope.MedicineMasterCollection.push(v);            
-        });
+      $scope.MedicineMasterCollection=[];
+      $scope.MedicineMasterCollection =MedicineMasterService.GetAll();
+      $scope.New = new ViewModel();
     }
-    
-    $scope.PostMedicieMaster=function(NewItem) {
-        $scope.MedicineMasterCollection=[];        
-        MedicineMasterService.PostMedicieMaster(NewItem);        
-        NewItem.MedicineName='';
-        NewItem.GenericName='';
-        var TempCollection =MedicineMasterService.GetAllMedicieMaster();
-        angular.forEach(TempCollection,function(v,k){
-            $scope.MedicineMasterCollection.push(v);            
-        });          
-    };
-    
-    $scope.GetAllMedicieMaster=function() {    
-         $scope.MedicineMasterCollection=[];   
-         var TempCollection =MedicineMasterService.GetAllMedicieMaster();
-        angular.forEach(TempCollection,function(v,k){
-            $scope.MedicineMasterCollection.push(v);            
+
+    $scope.Post=function(NewItem) {
+      if($scope.IsDuplicateName(NewItem.MedicineName)){
+        $ionicPopup.alert({
+          title: 'Duplicate Name Error',
+          template: 'Medicine name already present.'
         });
-    }; 
-    
-    $scope.DeleteRecord=function($index) {
-        var confirm = $ionicPopup.confirm({
-                title:'Confirm Delete',
-                template:'Are you sure to delete !'
+      }
+      else{
+        NewItem.Id=0;
+        var result = MedicineMasterService.Post(NewItem);
+        if(result){
+          $ionicPopup.alert({
+            title: 'Success',
+            template: 'Record saved successfully'
+          });
+          $scope.New = new ViewModel();
+        }else{
+          $ionicPopup.alert({
+            title: 'Success',
+            template: 'Record can not be saved'
+          });
+        }
+      }
+    };
+
+    $scope.GetAll=function() {
+         $scope.MedicineMasterCollection=[];
+         var TempCollection =MedicineMasterService.GetAll();
+        angular.forEach(TempCollection,function(v,k){
+            $scope.MedicineMasterCollection.push(v);
+        });
+    };
+
+    $scope.Delete=function(Item) {
+        if($scope.IsInUse(Item)){
+          $ionicPopup.alert({
+            title: 'Reference Error',
+            template: 'This record can not be deleted, reference found.'
+          });
+        }else{
+
+          var confirm = $ionicPopup.confirm({
+            title:'Confirm Delete',
+            template:'Are you sure to delete !'
+          });
+          confirm.then(function(res){
+            if(res){
+              var result =  MedicineMasterService.Delete(Item.Id);
+              if(result){
+                $ionicPopup.alert({
+                  title: 'Success',
+                  template: 'Record deleted successfully'
                 });
-                confirm.then(function(res){
-                if(res){
-                    var TempCollection = MedicineMasterService.DeleteRecord($index);
-                        $scope.MedicineMasterCollection=[];
-                        angular.forEach(TempCollection,function(v,k){
-                                $scope.MedicineMasterCollection.push(v);            
-                            });                     
-                }               
-                });    
-        
-    };  
-     
-    init();  
+              }
+              else{
+                $ionicPopup.alert({
+                  title: 'Error',
+                  template: 'Record can not be deleted'
+                });
+              }
+
+            }
+          });
+        }
+    };
+
+    $scope.IsInUse=function(Item){
+    collection=[];
+     collection = MedicineStockService.GetByMedicineName(Item.MedicineName);
+    if(collection.length>0){
+      return true
+    }
+    else {
+      return false
+    }
+  }
+
+    $scope.IsDuplicateName=function (MedicineName) {
+      var result =false;
+      angular.forEach($scope.MedicineMasterCollection,function (v,k) {
+        if(v.MedicineName===MedicineName){
+          result=true;
+        }
+      })
+      return result;
+    }
+
+    init();
 })
-   
+
 .controller('medicineStockCtrl', function($scope) {
 
 });
- 

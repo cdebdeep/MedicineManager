@@ -2,12 +2,12 @@
  * Created by debdeep.chaudhuri on 5/2/2016.
  */
 angular.module('app.services')
-    .service('MedicineStockService',['$localStorage','$ionicPopup', function ($localStorage,$ionicPopup){
+    .service('MedicineStockService',['$localStorage','$ionicPopup','SchedulerService', function ($localStorage,$ionicPopup,SchedulerService){
     var MedicineStockService={};
     $localStorage.$default({
             MedicineStockCollection: []
-        });        
-    MedicineStockService.GetAll=function () {        
+        });
+    MedicineStockService.GetAll=function () {
             return $localStorage.MedicineStockCollection;
     }
     MedicineStockService.GetById=function (ItemId) {
@@ -29,29 +29,41 @@ angular.module('app.services')
             return match;
         }
     MedicineStockService.PostItem=function (NewItem) {
-        $localStorage.MedicineStockCollection.push({
-        ItemId:$localStorage.MedicineStockCollection.length+1,    
-        MedicineName:NewItem.MedicineName,
-        BatchNo:NewItem.BatchNo,
-        PurchaseDate:NewItem.PurchaseDate,
-        Quantity:NewItem.Quantity,
-        ExpDate:NewItem.ExpDate,
-        NotifyMeBefore:NewItem.NotifyMeBefore,
-        NotifyType:NewItem.NotifyType
+      var result =false;
+        var NewId=0;
+        angular.forEach($localStorage.MedicineStockCollection,function (v,k) {
+          if(v.Id>NewId){
+            NewId=v.Id;
+          }
         });
-        return true;
+        NewId=NewId+1;
+        var ScheduleStartDate = new Date(NewItem.ExpDate -NewItem.NotifyMeBefore);
+        var result = SchedulerService.Post(NewId,NewItem.NotifyType,ScheduleStartDate,new Date(),1)
+        if(result){
+          $localStorage.MedicineStockCollection.push({
+            ItemId:NewId,
+            MedicineName:NewItem.MedicineName,
+            BatchNo:NewItem.BatchNo,
+            PurchaseDate:NewItem.PurchaseDate,
+            Quantity:NewItem.Quantity,
+            ExpDate:NewItem.ExpDate,
+            NotifyMeBefore:NewItem.NotifyMeBefore,
+            NotifyType:NewItem.NotifyType
+          });
+        }
+        return result;
     }
     MedicineStockService.PutItem=function (Item) {
         var result =false;
         angular.forEach($localStorage.MedicineStockCollection,function (v,k) {
-            if(v.ItemId===ItemId){
-                v.MedicineName=tem.MedicineName,
-                v.BatchNo=BatchNo,
-                v.PurchaseDate=PurchaseDate,
-                v.Quantity=Quantity,
-                v.ExpDate=ExpDate,
-                v.NotifyMeBefore=NotifyMeBefore,
-                v.NotifyType=NotifyType
+            if(v.ItemId===Item.ItemId){
+                v.MedicineName=Item.MedicineName,
+                v.BatchNo=Item.BatchNo,
+                v.PurchaseDate=Item.PurchaseDate,
+                v.Quantity=Item.Quantity,
+                v.ExpDate=Item.ExpDate,
+                v.NotifyMeBefore=Item.NotifyMeBefore,
+                v.NotifyType=Item.NotifyType
 
                 result=true;
             }
@@ -63,14 +75,14 @@ angular.module('app.services')
         for(var i=0;i<=$localStorage.MedicineStockCollection.length-1;i++){
             if($localStorage.MedicineStockCollection[i].ItemId==ItemId)
                 index=i;
-        }        
+        }
         if(index>=0){
             $localStorage.MedicineStockCollection.splice(index,1);
             return true;
         }
-        else 
+        else
             return false;
-            
+
     }
     MedicineStockService.DeleteAll=function () {
         $localStorage.$reset({

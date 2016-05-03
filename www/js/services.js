@@ -7,38 +7,86 @@ angular.module('app.services', [])
     .service('MedicineMasterService', ['$localStorage','$ionicPopup', function ($localStorage,$ionicPopup) {
         var MedicineMasterService = {};
         $localStorage = $localStorage.$default({
-            MedicieMasterCollection: []
+            MedicineMasterCollection: []
         });
-        MedicineMasterService.PostMedicieMaster = function (obj) {
-            $localStorage.MedicieMasterCollection.push(
+
+        MedicineMasterService.Post = function (obj) {
+          var result =false;
+          var NewId=0;
+            angular.forEach($localStorage.MedicineMasterCollection,function (v,k) {
+              if(v.Id>NewId){
+                NewId=v.Id;
+              }
+            });
+          NewId=NewId+1;
+
+            $localStorage.MedicineMasterCollection.push(
                 {
+                    Id:NewId,
                     MedicineName: obj.MedicineName,
                     GenericName: obj.GenericName
-                }
-            );
-            return $localStorage.MedicieMasterCollection;
+                });
+                result=true;
+            return result;
         };
-        MedicineMasterService.GetMedicieMaster = function (MedicineName) {
-            angular.forEach($localStorage.MedicieMasterCollection, function (v, k) {
-                if (v.MedicineName == MedicineName)
-                    return v;
-                else
-                    return null;
-            });
 
+        MedicineMasterService.Put = function (obj) {
+        var result =false;
+        angular.forEach($localStorage.MedicineMasterCollection,function (v,k) {
+          if(v.Id===obj.Id){
+            v.MedicineName=obj.MedicineName;
+            v.GenericName=obj.GenericName;
+            result=true;
+          }
+        });
+          return result;
+      };
+
+        MedicineMasterService.Get = function (MedicineName) {
+          var obj=null;
+            angular.forEach($localStorage.MedicineMasterCollection, function (v, k) {
+                if (v.MedicineName == MedicineName){
+                  obj= v;
+                }
+            });
+          return obj;
         };
-        MedicineMasterService.GetAllMedicieMaster = function () {
-            return $localStorage.MedicieMasterCollection;
+
+        MedicineMasterService.GetById = function (Id) {
+          var obj=null;
+          angular.forEach($localStorage.MedicineMasterCollection, function (v, k) {
+            if (v.Id === Id){
+              obj= v;
+            }
+          });
+          return obj;
+      };
+
+        MedicineMasterService.GetAll = function () {
+            return $localStorage.MedicineMasterCollection;
         };
-        MedicineMasterService.DeleteMedicieMaster = function () {
-            $localStorage.MedicieMasterCollection = [];
+
+        MedicineMasterService.DeleteAll = function () {
+          $localStorage.$reset({
+            MedicineMasterCollection: []
+          });
+          return true;
         };
-        MedicineMasterService.DeleteRecord=function ($index) {
-            $localStorage.MedicieMasterCollection.splice($index,1);  
-            return $localStorage.MedicieMasterCollection;           
-            
-                
-  };
+
+        MedicineMasterService.Delete=function (ItemId)  {
+          var index=-1;
+          for(var i=0;i<=$localStorage.MedicineMasterCollection.length-1;i++){
+            if($localStorage.MedicineMasterCollection[i].Id==ItemId)
+              index=i;
+          }
+          if(index>=0){
+            $localStorage.MedicineMasterCollection.splice(index,1);
+            return true;
+          }
+          else
+            return false;
+        };
+
         return MedicineMasterService;
     }]);
 
