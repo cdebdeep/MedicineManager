@@ -51,7 +51,7 @@ angular.module('app.controllers')
                 });                
             }            
             
-        }
+        };
         $scope.Put=function(Item) {
             var result =  MedicineStockService.PutItem(Item);
             if(result){
@@ -67,7 +67,7 @@ angular.module('app.controllers')
                 });
             }
 
-        }
+        };
         $scope.Delete=function (ItemId) {
             var confirm = $ionicPopup.confirm({
                 title:'Confirm Delete',
@@ -91,7 +91,7 @@ angular.module('app.controllers')
 
                 }
             });
-        }
+        };
         $scope.DeleteAll=function (Item) {
             var confirm = $ionicPopup.confirm({
                 title:'Confirm Delete',
@@ -102,6 +102,6 @@ angular.module('app.controllers')
                     MedicineStockService.DeleteAll();
                 }
             });
-        }
+        };
 
-})
+});

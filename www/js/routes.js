@@ -12,18 +12,18 @@ angular.module('app.routes', [])
       url: '/side-menu21',
       templateUrl: 'templates/menu.html',
       abstract:true
-    })
+    })  
 
   .state('menu.home', {
     url: '/home',
     views: {
       'side-menu21': {
-        templateUrl: 'templates/Home.html',
+        templateUrl: 'templates/home.html',
         controller: 'homeCtrl'
       }
     }
-  })
-
+  }) 
+  
   .state('menu.medicineMaster', {
       url: '/medicinemaster',
       views: {
@@ -32,7 +32,7 @@ angular.module('app.routes', [])
           controller: 'medicineMasterCtrl'
         }
       }
-    })
+    }) 
 
     .state('menu.MedicineMasterEdit', {
       url: '/MedicineMasterEdit',
@@ -78,11 +78,9 @@ angular.module('app.routes', [])
         controller: 'MedicineStockEditCtrl'
       }
     }
-  })
+  });
 
 
-$urlRouterProvider.otherwise('/side-menu21/home')
-
-
+$urlRouterProvider.otherwise('/side-menu21/home');
 
 });
