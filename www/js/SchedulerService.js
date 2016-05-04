@@ -2,7 +2,7 @@
  * Created by debdeep.chaudhuri on 5/3/2016.
  */
 angular.module('app.services')
-  .service('SchedulerService',['$localStorage','$cordovaLocalNotification',function($localStorage,$cordovaLocalNotification) {
+  .service('SchedulerService',['$localStorage','$cordovaLocalNotification','$q',function($localStorage,$cordovaLocalNotification,$q) {
     var SchedulerService={};
     $localStorage.$default({
       ScheduleCollection: []
@@ -19,8 +19,8 @@ angular.module('app.services')
 
 
     SchedulerService.Post=function(StockId,ScheduleType,ScheduleStartdate,ScheduleCreationDate,Status) {
-      console.log('called')
-      var result =false;
+      console.log('called');
+      var returnResult =false;
       var NewId=0;
       angular.forEach($localStorage.ScheduleCollection,function (v,k) {
         if(v.Id>NewId){
@@ -28,8 +28,8 @@ angular.module('app.services')
         }
       });
       NewId=NewId+1;
-      var NewItem = new ScheduleModel(NewId,StockId,ScheduleType,ScheduleStartdate,ScheduleCreationDate,Status)
-      $cordovaLocalNotification.schedule({
+      var NewItem = new ScheduleModel(NewId,StockId,ScheduleType,ScheduleStartdate,ScheduleCreationDate,Status);      
+       return  $cordovaLocalNotification.schedule({
         id: NewId,
         title: 'Notification Schedule',
         text: 'Your notification is schedule at' + ScheduleStartdate.toString(),
@@ -37,11 +37,10 @@ angular.module('app.services')
         every: ScheduleType,
       }).then(function (result) {
         $localStorage.ScheduleCollection.push(NewItem);
-        console.log($localStorage.ScheduleCollection);
         result =true;
-      });
-      return result;
-    }
+        return result;                      
+      });     
+    };
 
     SchedulerService.Put=function(StockId,ScheduleType,ScheduleStartdate,ScheduleCreationDate,Status) {
       var result =false;

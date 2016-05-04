@@ -3,7 +3,7 @@
  */
 angular.module('app.controllers')
 
-.controller('MedicineStockAddCtrl', function($scope, $stateParams, $ionicPopup, MedicineMasterService, MedicineStockService) {
+.controller('MedicineStockAddCtrl', function($scope, $stateParams, $state,$ionicPopup, MedicineMasterService, MedicineStockService) {
     function ViewModel(){
         this.ItemId=0;
         this.MedicineName='';
@@ -14,43 +14,51 @@ angular.module('app.controllers')
         this.NotifyMeBefore=0;
         this.NotifyType='';
     }
-        function init(){                   
+        function init(){
+            $state.forceReload();
             $scope.MedicineMasterCollection=[];
             var TempCollection =MedicineMasterService.GetAll();
             angular.forEach(TempCollection,function(v,k){
                 $scope.MedicineMasterCollection.push(v);
-            });          
+            });
 
             $scope.MedicineStockCollection=MedicineStockService.GetAll();
-            
-            
+
+
             $scope.NotifyTypeCollection=[
                 {'NotifyType':'hour'},
                 {'NotifyType':'day'},
                 {'NotifyType':'week'},
                 {'NotifyType':'month'}
-            ];            
+            ];
             $scope.New = new ViewModel();
 
 
         }
         init();
         $scope.Post=function (NewItem) {
-            NewItem.ItemId=0;            
-            var result = MedicineStockService.PostItem(NewItem);           
+            NewItem.ItemId=0;
+           var promiseResult = MedicineStockService.PostItem(NewItem);
+          promiseResult.then(function (result) {
             if(result){
-                $ionicPopup.alert({
-                    title: 'Success',
-                    template: 'Record saved successfully'
-                });
-                $scope.New = new ViewModel();
+              $ionicPopup.alert({
+                title: 'Success',
+                template: 'Record saved successfully'
+              });
+              $scope.New = new ViewModel();
             }else{
-                $ionicPopup.alert({
-                    title: 'Success',
-                    template: 'Record can not be saved'
-                });                
-            }            
-            
+              $ionicPopup.alert({
+                title: 'Error',
+                template: 'Record can not be saved'
+              });
+            }
+          }).catch(function (err) {
+            console.log(err);
+            $ionicPopup.alert({
+              title: 'Error',
+              template: 'Record can not be saved'
+            });
+          });
         };
         $scope.Put=function(Item) {
             var result =  MedicineStockService.PutItem(Item);
