@@ -17,7 +17,6 @@ angular.module('app.services')
     }
 
 
-
     SchedulerService.Post=function(StockId,ScheduleType,ScheduleStartdate,ScheduleCreationDate,Status) {
       console.log('called');
       var returnResult =false;
@@ -46,7 +45,7 @@ angular.module('app.services')
       var result =false;
       angular.forEach($localStorage.ScheduleCollection,function (v,k) {
         if(v.StockId===StockId){
-          $cordovaLocalNotification.schedule({
+        return  $cordovaLocalNotification.schedule({
             id: v.Id,
             title: 'Notification Schedule',
             text: 'Your notification is schedule at' + ScheduleStartdate.toString(),
@@ -58,11 +57,12 @@ angular.module('app.services')
             v.ScheduleCreationDate=ScheduleCreationDate;
             v.Status=Status;
             result =true;
+            return result;
           });
         }
       });
       return result;
-    }
+    };
 
     SchedulerService.Delete=function (StockId)  {
       var index=-1;

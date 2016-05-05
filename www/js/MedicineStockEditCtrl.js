@@ -35,19 +35,27 @@ angular.module('app.controllers')
         }
     init();
     $scope.Put=function(Item) {
-            var result =  MedicineStockService.PutItem(Item);      
-            if(result){
-                $ionicPopup.alert({
-                    title: 'Success',
-                    template: 'Record saved successfully'
-                });
-                $scope.New = new ViewModel();
-            }else{
-                $ionicPopup.alert({
-                    title: 'Error',
-                    template: 'Record can not be saved'
-                });
-            }
-
+            var promiseResult =  MedicineStockService.PutItem(Item);
+      promiseResult.then(function (result) {
+        if(result){
+          $ionicPopup.alert({
+            title: 'Success',
+            template: 'Record saved successfully'
+          });
+          $scope.New = new ViewModel();
+        }else{
+          $ionicPopup.alert({
+            title: 'Error',
+            template: 'Record can not be saved'
+          });
         }
-})
+      }).catch(function (err) {
+        console.log(err);
+        $ionicPopup.alert({
+          title: 'Error',
+          template: 'Record can not be saved'
+        });
+      });
+
+     };
+});

@@ -29,7 +29,7 @@ angular.module('app.services')
             return match;
         };
     MedicineStockService.PostItem=function (NewItem) {
-      var retResult =false;
+        var retResult =false;
         var NewId=0;
         angular.forEach($localStorage.MedicineStockCollection,function (v,k) {
           if(v.Id>NewId){
@@ -37,7 +37,9 @@ angular.module('app.services')
           }
         });
         NewId=NewId+1;
-        var ScheduleStartDate = new Date(NewItem.ExpDate -NewItem.NotifyMeBefore);       
+        var ScheduleStartDate = new Date();
+        ScheduleStartDate.setDate(NewItem.ExpDate.getDate() -NewItem.NotifyMeBefore);
+        console.log(ScheduleStartDate);
         var promiseResult = SchedulerService.Post(NewId,NewItem.NotifyType,ScheduleStartDate,new Date(),1);
        return promiseResult.then(function(result){
           if(result){
@@ -51,26 +53,33 @@ angular.module('app.services')
               NotifyMeBefore:NewItem.NotifyMeBefore,
               NotifyType:NewItem.NotifyType
             });
-            retResult=true;   
-            return retResult;         
+            retResult=true;
+            return retResult;
           }
-        });      
+        });
     };
     MedicineStockService.PutItem=function (Item) {
-        var result =false;
-        angular.forEach($localStorage.MedicineStockCollection,function (v,k) {
+        var retResult =false;
+        var ScheduleStartDate = new Date();
+        ScheduleStartDate.setDate(Item.ExpDate.getDate() -Item.NotifyMeBefore);
+        var promiseResult = SchedulerService.Put(NewId,Item.NotifyType,ScheduleStartDate,new Date(),1);
+      return promiseResult.then(function (result) {
+        if(result){
+          angular.forEach($localStorage.MedicineStockCollection,function (v,k) {
             if(v.ItemId===Item.ItemId){
-                v.MedicineName=Item.MedicineName,
+              v.MedicineName=Item.MedicineName,
                 v.BatchNo=Item.BatchNo,
                 v.PurchaseDate=Item.PurchaseDate,
                 v.Quantity=Item.Quantity,
                 v.ExpDate=Item.ExpDate,
                 v.NotifyMeBefore=Item.NotifyMeBefore,
                 v.NotifyType=Item.NotifyType
-                result=true;
+                retResult=true;
             }
-        });
-        return result;
+          });
+          return retResult;
+        }
+      });
         };
     MedicineStockService.DeleteItem=function (ItemId) {
         var index=-1;
@@ -85,13 +94,13 @@ angular.module('app.services')
         else
             return false;
 
-    }
+    };
     MedicineStockService.DeleteAll=function () {
         $localStorage.$reset({
             MedicineStockCollection: []
         });
         return true;
-    }
+    };
 
         return MedicineStockService;
 }]);
